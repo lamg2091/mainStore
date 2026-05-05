@@ -1,0 +1,192 @@
+
+
+:root {
+  --text-filter: #ffffff;
+  --bg-main: #ffffff;
+  --bg-input: #636e72;
+  --bg-header: #f8f9fa;
+  --text-primary: #2d3436;
+  --text-secondary: #636e72;
+  --text-header: #fff;
+  --bg-aside: #333;
+  --text-icons: #fff;
+  --accent: #3498db;
+  --border: #dfe6e9;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body.dark-theme {
+  --bg-main: #121212;
+  --bg-header: #1e1e1e;
+  --text-primary: #f5f6fa;
+  --bg-aside: #333;
+  --text-secondary: #b2bec3;
+  --text-header: #fff;
+  --accent: #5dade2;
+  --border: #2d3436;
+   --bg-input: #636e72;
+  --shadow: rgba(0, 0, 0, 0.5);
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease, color 0.3s ease; 
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: Arial, sans-serif;
+}
+body.dark-theme .header{
+    background-color: var(--bg-header);
+}
+body.dark-theme .logo h1{
+    color: var(--text-header)
+}
+body.dark-theme .link-navbar a{
+    color: var(--text-header)
+}
+body.dark-theme .shopping-cart i{
+    color: var(--text-primary)
+}
+body.dark-theme .dark-mode{
+   background-color: var(--text-header);
+}
+body.dark-theme .products-layout .aside-main{
+  background-color: var(--bg-aside);
+}
+body.dark-theme .filter-producto label{
+  color: var(--text-filter)
+}
+body.dark-theme .products-layout .aside-main h3{
+  color: var(--text-filter)
+}
+body.dark-theme .filter-producto select{
+  background-color: var(--bg-input);
+  color: var(--text-filter);
+  font-weight: bold;
+}
+body.dark-theme .filter-producto input[type="text"]{
+  background-color: var(--bg-input);
+  color: var(--text-header);
+  font-weight: bld;
+}
+body.dark-theme .filter-producto input::placeholder{
+  color: var(--text-primary);
+}
+body.dark-theme .header-producto h1{
+  color: var(--text-filter)
+}
+body.dark-theme .container-producto .card{
+  background-color: var(--bg-aside);
+  color: var(--text-filter)
+}
+body.dark-theme .container-producto .card  h4{
+  color: var(--text-header)
+}
+body.dark-theme .container-producto .card  h3{
+  color: var(--text-header)
+}
+body.dark-theme .container-producto .card  p{
+  color: var(--text-header)
+}
+body.dark-theme .contacto h3{
+  color: var(--text-header)
+}
+body.dark-theme .container-formulario{
+  background-color: var(--bg-aside);
+  color: var(--text-filter)
+}
+body.dark-theme .contacto-main h3{
+  color: var(--text-filter)
+}
+body.dark-theme form .group-input label{
+  color: var(--text-header)
+}
+body.dark-theme form .group-input input{
+  background-color: var(--bg-aside);
+  color: var(--text-header);
+}
+body.dark-theme form .mensaje textarea{
+  background-color: var(--bg-aside);
+}
+body.dark-theme form .mensaje label{
+  color: var(--text-header)
+}
+body.dark-theme .nosotros-hero{
+  background-color: var(--bg-aside);
+}
+body.dark-theme .nosotros-hero .hero-content h1{
+  color: var(--text-header)
+}
+body.dark-theme .nosotros-hero .hero-content p{
+  color: var(--text-header)
+}
+body.dark-theme .grid-layout .texto-historia h2{
+  color: var(--text-header)
+}
+body.dark-theme .grid-layout .texto-historia p{
+   color: var(--text-header)
+}
+body.dark-theme .nosotros-valores h2{
+  color: var(--text-header)
+}
+body.dark-theme .valores-grid .valor-card{
+  background-color: var(--bg-aside);
+}
+body.dark-theme .valores-grid .valor-card h3{
+  color: var(--text-header)
+}
+body.dark-theme .valor-card p{
+  color: var(--text-icons)
+}
+body.dark-theme .form-login{
+  background-color: var(--bg-aside);
+}
+body.dark-theme .header-login h1{
+  color: var(--text-header)
+}
+body.dark-theme .group-login label{
+  color: var(--text-header);
+}
+body.dark-theme .show-password label{
+  color: var(--text-header)
+}
+body.dark-theme .link label{
+  color: var(--text-header)
+}
+body.dark-theme .new-pass label{
+  color: var(--text-header);
+}
+body.dark-theme .link-login label{
+  color: var(--text-header)
+}
+body.dark-theme .form-register{
+  background-color: var(--bg-aside);
+ 
+}
+body.dark-theme .input-register input{
+  background-color: var(--bg-input);
+}
+body.dark-theme .input-register label{
+  color: var(--text-header)
+}
+body.dark-theme .mostrar-contraseña label{
+  color: var(--text-header);
+}
+body.dark-theme .carrito-overlay{
+  background-color: transparent;
+}
+body.dark-theme .carrito-sidebar{
+  background-color: var(--bg-aside);
+}
+body.dark-theme  .carrito-header button{
+  background-color: #f5f6fa;
+  color: var(--bg-aside)
+}

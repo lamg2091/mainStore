@@ -1,0 +1,129 @@
+
+
+.container-main-home {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    min-height: 70vh; 
+    padding: 40px 5%; 
+    gap: 30px;
+}
+
+.info-main {
+    line-height: 1.6;
+    padding: 20px;
+    max-width: 600px; 
+}
+
+.info-main h1 {
+    text-transform: uppercase;
+    font-size: 2.5rem; 
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', sans-serif;
+    color: var(--text-primary); 
+    margin-bottom: 15px;
+}
+
+.info-main p {
+    font-size: 1.2rem;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', sans-serif;
+    color: var(--text-secondary); 
+    margin-bottom: 35px;
+}
+
+.info-main a {
+    display: inline-block; 
+    text-decoration: none;
+    background-color: #DB1A1A; 
+    padding: 12px 24px;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+
+.info-main a:hover {
+    background-color: #B01515; 
+    transform: translateY(-3px); 
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px); 
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0); 
+  }
+}
+.img-main img {
+  opacity: 0; 
+  animation: fadeInLeft 0.8s ease-out 0.2s forwards;
+}
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px); 
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0); 
+  }
+}
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px); 
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.info-main h1, p {
+  opacity: 0; 
+  animation-name: fadeInLeft;
+  animation-duration: 0.8s; 
+  animation-timing-function: ease-out; 
+  animation-fill-mode: forwards; 
+}
+@media (max-width: 1024px) {
+    .container-main-home {
+        padding: 30px 3%;
+    }
+    
+    .info-main h1 {
+        font-size: 2.2rem; 
+    }
+}
+@media (max-width: 768px) {
+    .container-main-home {
+        flex-direction: column; 
+        text-align: center;     
+        padding: 40px 20px;
+        justify-content: center;
+    }
+
+    .info-main {
+        max-width: 100%; 
+        padding: 10px;
+    }
+
+    .info-main h1 {
+        font-size: 2rem;
+    }
+
+    .info-main p {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+    }
+
+    .info-main a {
+        width: 80%; 
+        margin: 0 auto;
+    }
+}

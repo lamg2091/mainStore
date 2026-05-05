@@ -1,0 +1,161 @@
+:root {
+  --color-primary: #007bff;
+  --color-primary-hover: #0056b3;
+  --color-success: #28a745;
+  --color-danger: #dc3545;
+  --color-bg: #f8f9fa;
+  --color-surface: #ffffff;
+  --color-text: #212529;
+  --color-text-muted: #6c757d;
+  --color-border: #dee2e6;
+  --shadow: rgba(0, 0, 0, 0.2) 0px 4px 12px;
+}
+.contenedor-principal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.form-register {
+  box-shadow: var(--shadow);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+}
+.header-form {
+  margin: 0 auto;
+  text-align: center;
+  line-height: 2;
+}
+.header-form img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+.header-form h3 {
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: bold;
+}
+.input-register {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.input-register label {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+.input-register input {
+  width: 100%;
+  padding: 10px 10px 10px 35px;
+  outline: none;
+}
+.input-register .icon {
+  position: absolute;
+  top: 54%;
+  transform: translateX(51%);
+  font-size: 20px;
+}
+.mostrar-contraseña {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.link-form {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+.link-form a {
+  text-decoration: none;
+  background-color: #007bff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: var(--color-bg);
+  font-weight: bold;
+  transition: all ease-in 0.1s;
+}
+.link-form a:hover {
+  background-color: #0056b3;
+  transform: translateY(2px);
+}
+.fotter-form-register {
+  text-align: center;
+  margin-top: 15px;
+  color: var(--color-text-muted);
+}
+.fotter-form-register p {
+  font-size: 0.9rem;
+}
+.error{
+    color: var(--color-danger);
+    font-size: 0.8rem;
+}
+@media (max-width: 1024px) {
+  .form-register {
+    max-width: 450px;
+    padding: 25px;
+  }
+}
+
+@media (max-width: 678px) {
+  .contenedor-principal {
+    padding: 10px;
+  }
+
+  .form-register {
+    margin: 0;
+    padding: 20px;
+  }
+
+  .input-register {
+    width: 100%;
+  }
+
+  .link-form {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .link-form a {
+    text-align: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .contenedor-principal {
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+
+  .form-register {
+    box-shadow: none;
+    border-radius: 0;
+    padding: 15px 5px;
+    background-color: transparent;
+  }
+
+  .header-form img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .header-form h3 {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .contenedor-principal {
+    align-items: flex-start;
+    padding: 15px;
+  }
+  
+  .header-form {
+    line-height: 1.5;
+  }
+}

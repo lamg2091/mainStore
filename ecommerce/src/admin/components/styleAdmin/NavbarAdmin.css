@@ -1,0 +1,149 @@
+.navbar-admin {
+  background-color: #ffffff;
+  height: 70px;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+/* Izquierda: Fecha */
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-date {
+  font-size: 0.9rem;
+  color: #6b7280;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+/* Derecha: Buscador y Perfil */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Buscador */
+.navbar-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #f3f4f6;
+  padding: 8px 15px;
+  border-radius: 10px;
+  width: 300px;
+  transition: all 0.3s ease;
+}
+
+.navbar-search:focus-within {
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  border: 1px solid #3b82f6;
+}
+
+.navbar-search i {
+  color: #9ca3af;
+  margin-right: 10px;
+}
+
+.navbar-search input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  width: 100%;
+  color: #374151;
+}
+
+/* Acciones e Iconos */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-icon-btn {
+  background: none;
+  border: none;
+  position: relative;
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 1.2rem;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.nav-icon-btn:hover {
+  color: #3b82f6;
+}
+
+/* Punto de notificación rojo */
+.nav-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+
+.nav-divider {
+  width: 1px;
+  height: 30px;
+  background-color: #e5e7eb;
+}
+
+/* Perfil */
+.nav-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.profile-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.profile-role {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px; /* Estilo moderno cuadradito-redondeado */
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .navbar-search, .profile-info {
+    display: none;
+  }
+  .navbar-date {
+    font-size: 0.8rem;
+  }
+}

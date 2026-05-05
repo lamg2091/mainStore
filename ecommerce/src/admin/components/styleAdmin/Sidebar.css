@@ -1,0 +1,147 @@
+.sidebar-admin {
+  width: 260px;
+  height: 100vh;
+  background-color: #111827; /* Fondo oscuro profesional */
+  color: #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  border-right: 1px solid #1f2937;
+  transition: all 0.3s ease;
+}
+
+/* Logo Section */
+.sidebar-logo {
+  padding: 2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #1f2937;
+}
+
+.sidebar-logo i {
+  color: #3b82f6; /* Azul brillante para el icono */
+  font-size: 1.5rem;
+}
+
+.sidebar-logo span {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.sidebar-logo strong {
+  color: #3b82f6;
+}
+
+/* Menu Navigation */
+.sidebar-menu {
+  flex: 1;
+  padding: 1.5rem 0.8rem;
+  overflow-y: auto;
+}
+
+.menu-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin: 1.5rem 0 0.5rem 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Items del Menú */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: #9ca3af;
+  text-decoration: none;
+  border-radius: 10px;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.menu-item i {
+  width: 20px;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.menu-item:hover {
+  background-color: #1f2937;
+  color: #ffffff;
+}
+
+/* Estado Activo */
+.menu-item.active {
+  background-color: #3b82f6; 
+  color: #ffffff;
+}
+
+.menu-item.active i {
+  color: #ffffff;
+}
+
+.badge-new {
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: auto;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+.sidebar-footer {
+  padding: 1.5rem 0.8rem;
+  border-top: 1px solid #1f2937;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.back-store {
+  color: #60a5fa;
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.back-store:hover {
+  background-color: rgba(59, 130, 246, 0.2);
+}
+
+.btn-logout-sidebar {
+  width: 100%;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: #f87171; /* Color rojo suave para salir */
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.btn-logout-sidebar:hover {
+  background-color: rgba(248, 113, 113, 0.1);
+}
+
+/* Scrollbar personalizado para el menú */
+.sidebar-menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 10px;
+}
