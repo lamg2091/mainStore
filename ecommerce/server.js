@@ -138,6 +138,73 @@ app.get('/pedidos', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+app.get('/pedidos/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const pedido = await pool.query(
+            'SELECT * FROM pedidos WHERE id = $1', [id]
+        );
+        if (pedido.rows.length === 0) {
+            return res.status(404).json({ error: 'Pedido no encontrado' });
+        }
+        const items = await pool.query(
+            `SELECT nombre_producto AS nombre, cantidad, precio_unitario AS precio, subtotal
+       FROM detalle_pedidos WHERE pedido_id = $1`, [id]
+        );
+        res.json({ ...pedido.rows[0], items: items.rows });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+});
+app.get('/dashboard', async (req, res) => {
+  try {
+    const ingresos = await pool.query(
+      `SELECT COALESCE(SUM(total), 0) AS total FROM pedidos`
+    );
 
+    const pedidoActual = await pool.query(
+      `SELECT COUNT(*) AS total FROM pedidos
+       WHERE DATE(fecha) = CURRENT_DATE`
+    );
+
+    const productos = await pool.query(
+      `SELECT COUNT(*) AS total FROM productos`
+    );
+
+    const usuarios = await pool.query(
+      `SELECT COUNT(*) AS total FROM usuarios`
+    );
+
+    // ✅ actividad = últimos pedidos (no productos)
+    const actividad = await pool.query(
+      `SELECT id, nombre_cliente, total, estado, fecha
+       FROM pedidos
+       ORDER BY fecha DESC
+       LIMIT 3`
+    );
+
+    // ✅ stockBajo = últimos 4 productos (faltaba)
+    const stockBajo = await pool.query(
+      `SELECT id, nombre, imagen_url
+       FROM productos
+       ORDER BY id DESC
+       LIMIT 4`
+    );
+
+    res.json({
+      ingresos:   Number(ingresos.rows[0].total),
+      pedidosHoy: Number(pedidoActual.rows[0].total),
+      productos:  Number(productos.rows[0].total),
+      usuarios:   Number(usuarios.rows[0].total),
+      actividad:  actividad.rows,   // ✅ pedidos
+      stockBajo:  stockBajo.rows,   // ✅ productos
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
 const PORT = 3001;
 app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));

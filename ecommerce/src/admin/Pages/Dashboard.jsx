@@ -1,112 +1,128 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import StatCard from "../components/StatCard";
-import DataProducto from "../../Data/DataProducto";
-import '../../styles/Dashboard.css'
+import '../../styles/Dashboard.css';
 
 const Dashboard = () => {
-  const actividadesRecientes = [
-    {
-      id: 1,
-      usuario: "Ana Silva",
-      accion: "compró 2 Camisetas",
-      tiempo: "Hace 5 min",
-      status: "completado",
-    },
-    {
-      id: 2,
-      usuario: "Pedro Páramo",
-      accion: "registró una nueva cuenta",
-      tiempo: "Hace 15 min",
-      status: "registro",
-    },
-    {
-      id: 3,
-      usuario: "Marta Gómez",
-      accion: "canceló el pedido #4522",
-      tiempo: "Hace 1 hora",
-      status: "cancelado",
-    },
-  ];
+  const [datos, setDatos]       = useState(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError]       = useState(null);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const res = await fetch('http://localhost:3001/dashboard');
+        if (!res.ok) throw new Error('Error al cargar el dashboard');
+        const data = await res.json();
+        setDatos(data);
+      } catch (err) {
+        console.log(err)
+        setError(err.message);
+      } finally {
+        setCargando(false);
+      }
+    };
+    fetchDashboard();
+  }, []);
+
+  const getStatusActividad = (estado) => {
+    switch (estado?.toLowerCase()) {
+      case 'entregado': return 'completado';
+      case 'cancelado': return 'cancelado';
+      default:          return 'registro';
+    }
+  };
+
+  if (cargando) return <p style={{ padding: '2rem' }}>Cargando dashboard...</p>;
+  if (error)    return <p style={{ padding: '2rem', color: 'red' }}>Error: {error}</p>;
 
   return (
     <div className="dashboard-container">
-      {/* SECCIÓN DE BIENVENIDA */}
+
+      {/* BIENVENIDA */}
       <div className="dashboard-welcome">
         <div className="welcome-text">
-          <h1>¡Hola de nuevo, Luis! 👋</h1>
-          <p>
-            Esto es lo que está pasando en <strong>MainStore</strong> hoy.
-          </p>
+          <h1>¡Hola de nuevo! 👋</h1>
+          <p>Esto es lo que está pasando en <strong>MainStore</strong> hoy.</p>
         </div>
         <button className="btn-reporte">
           <i className="fa-solid fa-file-export"></i> Descargar Reporte
         </button>
       </div>
 
-      {/* REJILLA DE ESTADÍSTICAS (Usa las StatCards) */}
+      {/* ESTADÍSTICAS */}
       <div className="stats-grid">
         <StatCard
           titulo="Ingresos Brutos"
-          valor="$8.540.000"
+          valor={`$${Number(datos.ingresos).toLocaleString('es-CO')}`}
           icono="fa-solid fa-money-bill-trend-up"
-          tendencia={24}
           color="#10b981"
         />
         <StatCard
-          titulo="Nuevos Pedidos"
-          valor="42"
+          titulo="Nuevos Pedidos Hoy"
+          valor={datos.pedidosHoy}
           icono="fa-solid fa-box-open"
-          tendencia={12}
           color="#3b82f6"
         />
         <StatCard
           titulo="Productos en Catálogo"
-          valor={DataProducto.length}
+          valor={datos.productos}
           icono="fa-solid fa-shirt"
           color="#8b5cf6"
         />
         <StatCard
-          titulo="Visitas hoy"
-          valor="1,204"
-          icono="fa-solid fa-eye"
-          tendencia={-2}
+          titulo="Usuarios Registrados"
+          valor={datos.usuarios}
+          icono="fa-solid fa-users"
           color="#f59e0b"
         />
       </div>
 
       <div className="dashboard-bottom-section">
+
+        {/* ALERTA DE INVENTARIO */}
         <div className="dashboard-card stock-alert">
           <h3>⚠️ Alerta de Inventario</h3>
-          <ul className="stock-list">
-            {DataProducto.slice(0, 4).map((prod) => (
-              <li key={prod.id}>
-                <img src={prod.imagen} alt={prod.nombre} />
-                <div className="stock-info">
-                  <span>{prod.nombre}</span>
-                  <small>Quedan solo 3 unidades</small>
-                </div>
-                <button className="btn-reponer">Reponer</button>
-              </li>
-            ))}
-          </ul>
+          {datos.stockBajo.length === 0 ? (
+            <p style={{ padding: '1rem', color: '#6b7280' }}>No hay productos con stock bajo.</p>
+          ) : (
+            <ul className="stock-list">
+              {datos.stockBajo.map((prod) => (
+                <li key={prod.id}>
+                  <img src={prod.imagen_url} alt={prod.nombre} />
+                  <div className="stock-info">
+                    <span>{prod.nombre}</span>
+                    <small style={{ color: '#ef4444' }}>
+                      Quedan solo {prod.stock} unidades
+                    </small>
+                  </div>
+                  <button className="btn-reponer">Reponer</button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
+        {/* ACTIVIDAD RECIENTE */}
         <div className="dashboard-card recent-activity">
           <h3>⚡ Actividad Reciente</h3>
           <div className="activity-timeline">
-            {actividadesRecientes.map((act) => (
+            {datos.actividad.map((act) => (
               <div className="activity-item" key={act.id}>
-                <div className={`activity-dot ${act.status}`}></div>
+                <div className={`activity-dot ${getStatusActividad(act.estado)}`}></div>
                 <div className="activity-content">
                   <p>
-                    <strong>{act.usuario}</strong> {act.accion}
+                    <strong>{act.nombre_cliente}</strong>{' '}
+                    {act.estado === 'cancelado'
+                      ? `canceló el pedido #${act.id}`
+                      : `realizó un pedido por $${Number(act.total).toLocaleString('es-CO')}`}
                   </p>
-                  <span>{act.tiempo}</span>
+                  <span>{new Date(act.fecha).toLocaleDateString('es-CO')}</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
+
       </div>
     </div>
   );
