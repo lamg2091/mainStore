@@ -12,7 +12,7 @@ app.use(cors());
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
-    database: 'mainStore',
+    database: 'MainStore',
     password: 'Gladys2091@',
     port: 5432,
 });
@@ -56,6 +56,7 @@ app.get('/productos', async (req, res) => {
         const result = await pool.query('SELECT * FROM productos ORDER BY id DESC');
         res.json(result.rows);
     } catch (err) {
+        console.error("🚨 ERROR REAL AQUÍ:", err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -176,7 +177,6 @@ app.get('/dashboard', async (req, res) => {
       `SELECT COUNT(*) AS total FROM usuarios`
     );
 
-    // ✅ actividad = últimos pedidos (no productos)
     const actividad = await pool.query(
       `SELECT id, nombre_cliente, total, estado, fecha
        FROM pedidos
@@ -184,7 +184,6 @@ app.get('/dashboard', async (req, res) => {
        LIMIT 3`
     );
 
-    // ✅ stockBajo = últimos 4 productos (faltaba)
     const stockBajo = await pool.query(
       `SELECT id, nombre, imagen_url
        FROM productos
@@ -197,14 +196,41 @@ app.get('/dashboard', async (req, res) => {
       pedidosHoy: Number(pedidoActual.rows[0].total),
       productos:  Number(productos.rows[0].total),
       usuarios:   Number(usuarios.rows[0].total),
-      actividad:  actividad.rows,   // ✅ pedidos
-      stockBajo:  stockBajo.rows,   // ✅ productos
+      actividad:  actividad.rows,   
+      stockBajo:  stockBajo.rows,   
     });
 
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
+});
+app.post('/login-admin', async (req, res) => {
+    const { email, password } = req.body;
+    
+    try {
+        const adminQuery = await pool.query("SELECT * FROM usuarios WHERE email = $1 AND rol = 'admin'", [email]);
+        
+        if (adminQuery.rows.length === 0) {
+            return res.status(400).json({ message: "El administrador no existe o no tiene permisos" });
+        }
+        
+        const admin = adminQuery.rows[0];
+        const validarContraseña = await bcrypt.compare(password, admin.password);
+        
+        if (!validarContraseña) {
+            return res.status(400).json({ message: "Contraseña incorrecta" });
+        }
+        
+        res.status(200).json({
+            message: "Bienvenido admin",
+            token: "un-token-seguro-jwt-aqui"
+        });
+
+    } catch (error) {
+        console.error("🚨 Error real en /login-admin:", error);
+        res.status(500).json({ message: "Error interno en el servidor: " + error.message });
+    }
 });
 const PORT = 3001;
 app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));

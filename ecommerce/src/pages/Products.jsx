@@ -11,13 +11,19 @@ const Products = () => {
 
   useEffect(() => {
     fetch('http://localhost:3001/productos')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`Error del servidor: ${res.status}`);
+        }
+        return res.json();
+      })
       .then(data => {
         setProductos(data);
         setLoading(false);
       })
       .catch(err => {
         console.error('Error cargando productos:', err);
+        setProductos([]); 
         setLoading(false);
       });
   }, []);

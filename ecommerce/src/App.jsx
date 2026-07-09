@@ -12,6 +12,7 @@ import LoginRegister from "./pages/LoginRegister";
 import NuevaContraseña from "./pages/NuevaContraseña";
 import CartShopping from './components/Carrito/CartShopping';
 import { CartProvider } from "./components/context/cartContext";
+import LoginAdmin from "./pages/LoginAdmin";
 
 import AdminLayout from './admin/Layout/AdminLayout';
 import Dashboard from './admin/pages/Dashboard';
@@ -39,6 +40,7 @@ function App() {
               <Route path="contacto" element={<Contacto />} />
               <Route path="nosotros" element={<Nosotros />} />
               <Route path="login" element={<LoginUser />} />
+              <Route path="loginadmin" element={<LoginAdmin/>} />
               <Route path="registro" element={<LoginRegister />} />
               <Route path="nuevaContraseña" element={<NuevaContraseña />} />
               <Route path="*" element={<Home />} />

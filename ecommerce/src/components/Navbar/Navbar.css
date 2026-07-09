@@ -177,6 +177,70 @@ body {
   font-size: 1.5rem;
   color: #333;
 }
+.usuario-dropdown-container{
+  position: relative;
+  display: inline-block;
+}
+.dropdown-boton{
+  background: transparent;
+  border: solid 1px #ccc;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.dropdown-boton:hover{
+  background-color: rgba(0,0,0, 0.5);
+  color: #fff;
+}
+.dropdown-lista{
+  position: absolute;
+  right: 0;
+  top: 115%;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  list-style: none;
+  min-width: 200px;
+  z-index: 1000;
+  padding: 5px;
+}
+.dropdown-lista li a{
+  display: block;
+  padding: 10px 18px;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  text-align: left;
+}
+.dropdown-lista li a:hover{
+  background-color: #f5f5f5;
+  color: #333;
+}
+.dropdown-divisor{
+  height: 1px;
+  background-color: #e5e5e5;
+  margin: 6px 0;
+}
+.opcion-admin{
+  color: #777777 !important;
+  font-size: 12px !important;
+  font-style: italic;
+}
+.dark-theme .dropdown-lista{
+  background-color: #222222;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
+}
+.dark-theme .dropdown-lista li a {
+  color: #ffffff;
+}
+.dark-theme .dropdown-lista li a:hover {
+  background-color: #333333;
+}
 @media (max-width: 768px) {
     .header {
         padding: 10px 15px;
