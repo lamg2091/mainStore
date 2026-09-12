@@ -1,0 +1,115 @@
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.container-main-home{
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 30px;
+}
+.info-main{
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  text-align: center;
+  margin: 20px 50px;
+}
+.info-main p{
+  font-size: 1.2rem;
+}
+.info-main a{
+  text-decoration: none;
+  background-color: #333;
+  width: 18rem;
+  margin: 0 auto; 
+  padding: 0.9rem 0.7rem;
+  color: #fff;
+  border-radius: 999px;
+  margin-top: 20px;
+  font-weight: 600;
+}
+.info-main h1{
+  font-size: 4rem;
+  text-transform: uppercase;
+}
+.images-fondo{
+  display: flex;
+  flex-direction: column;
+  margin: auto 0;
+  position: relative;
+}
+.images-fondo .images1{
+  width: 600px;
+  position: absolute;
+  z-index: -1;
+  object-fit: fill;
+  bottom: 0;
+  right: 10%;
+  border-radius:10px;
+  height: 300px ;
+}
+@media (max-width: 1024px) {
+  .info-main {
+    margin: 20px 20px;
+  }
+
+  .info-main h1 {
+    font-size: 3rem;
+  }
+
+  .images-fondo img {
+    width: 90vw; /* Se adapta al ancho de la pantalla */
+    max-width: 700px;
+    height: 260px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .info-main h1 {
+    font-size: 2.2rem; /* Título más pequeño para móviles */
+  }
+
+  .info-main p {
+    font-size: 1rem;
+  }
+
+  .info-main a {
+    width: 100%; 
+    max-width: 16rem;
+  }
+
+  .images-fondo img {
+    width: 95vw;
+    height: 220px;
+    
+  }
+
+  
+  .images-modelo img {
+    left: 0%;
+    max-height: 250px;
+    top: 340px
+  }
+}
+
+
+@media (max-width: 482px) {
+  .info-main h1 {
+    font-size: 1.8rem;
+  }
+  .images-fondo .images1 {
+    height: 200px;
+    margin-top: 50px;
+    left: 0;
+    width: 28.6rem;
+    height: 200px;
+    
+  }
+}
