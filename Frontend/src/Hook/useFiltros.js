@@ -14,26 +14,31 @@ export const useFiltros = (productosIniciales) => {
   }, [filtros]);
 
   const productosFiltrados = useMemo(() => {
-
     if (!Array.isArray(productosIniciales)) {
       return [];
     }
 
     return productosIniciales.filter((producto) => {
-    
+      // 1. Coincidencia por nombre (Búsqueda)
       const coincideNombre = (producto?.nombre || "")
         .toLowerCase()
         .includes(filtros.busqueda.toLowerCase());
       
+      // 2. Coincidencia por categoría (Ignorando mayúsculas/minúsculas y espacios)
+      const categoriaProducto = (producto?.categoria || "").trim().toLowerCase();
+      const categoriaFiltro = filtros.categoria.trim().toLowerCase();
+      
       const coincideCategoria = 
         filtros.categoria === "Todos" ||
-        producto?.categoria === filtros.categoria;
+        categoriaProducto === categoriaFiltro;
       
-      const coincidePrecio = (producto?.precio || 0) <= filtros.precioMaximo;
+      // 3. Coincidencia por precio máximo
+      const coincidePrecio = Number(producto?.precio || 0) <= Number(filtros.precioMaximo);
 
       return coincideNombre && coincideCategoria && coincidePrecio;
     });
   }, [productosIniciales, filtros]);
+
   const actualizarFiltro = (nombre, valor) => {
     setFiltros((prev) => ({
       ...prev,

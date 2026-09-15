@@ -63,13 +63,13 @@ const Products = () => {
               onChange={(e) => actualizarFiltro("categoria", e.target.value)}
             >
               <option value="Todos">Todos</option>
-              <option value="Pantalones">Pantalones</option>
-              <option value="Chaquetas">Chaquetas</option>
-              <option value="Blusas">Blusas</option>
-              <option value="Vestidos">Vestidos</option>
-              <option value="Camisetas">Camisetas</option>
+              <option value="Belleza">Sandalias Playeras</option>
+              <option value="Deportes">Tenis Urbanos Casual</option>
+              <option value="Hogar">Tenis Running Pro</option>
+              <option value="Electrica">Vestido Floral Casual</option>
+              <option value="Calzado">Jean Slim Fit</option>
               <option value="Accesorios">Accesorios</option>
-              <option value="Buzos">Buzos</option>
+              <option value="Ropa">Camisa Basica Cuello Redondo</option>
             </select>
           </div>
 
@@ -101,7 +101,7 @@ const Products = () => {
             ) : productosFiltrados.length > 0 ? (
               productosFiltrados.map((producto) => (
                 <div className="container-card" key={producto.id}>
-                  <img src={producto.imagen_url} alt={producto.nombre} />
+                  <img src={`/images/${producto.imagen_url}`} alt={producto.nombre} />
                   <div>
                     <h3>{producto.nombre}</h3>
                     <p>{producto.categoria}</p>

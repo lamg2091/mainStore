@@ -4,8 +4,7 @@ const { Pool } = pkg;
 import bcrypt from "bcrypt";
 import cors from "cors";
 import "dotenv/config";
-import nodemailer from "nodemailer";
-import crypto from "crypto";
+
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -13,19 +12,20 @@ app.use(cors());
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "mainStore",
-  password: "2091",
+  database: "mainstore",
+  password: "miclave123",
   port: 5432,
 });
 
+// REGISTRO
 app.post("/registro", async (req, res) => {
   const { name, email, password } = req.body;
   try {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const newUser = await pool.query(
-      "INSERT INTO usuarios(name, email, password) VALUES ($1, $2, $3) RETURNING *",
-      [name, email, hashedPassword],
+      "INSERT INTO usuarios(nombre, apellido, email, contrasena_hash) VALUES ($1, $2, $3, $4) RETURNING id_usuario, nombre, email",
+      [name, "Sin apellido", email, hashedPassword],
     );
     res.json({ message: "Usuario creado", user: newUser.rows[0] });
   } catch (err) {
@@ -33,16 +33,15 @@ app.post("/registro", async (req, res) => {
   }
 });
 
+// LOGIN
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await pool.query("SELECT * FROM usuarios WHERE email = $1", [
-      email,
-    ]);
+    const user = await pool.query("SELECT * FROM usuarios WHERE email = $1", [email]);
     if (user.rows.length > 0) {
       const validatePassword = await bcrypt.compare(
         password,
-        user.rows[0].password,
+        user.rows[0].contrasena_hash,
       );
       if (validatePassword) {
         res.json({ message: "Login Exitoso", user: user.rows[0] });
@@ -57,9 +56,16 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// OBTENER PRODUCTOS (Corregido: c.nombre en lugar de nombre_categoria)
 app.get("/productos", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM productos ORDER BY id DESC");
+    const result = await pool.query(`
+      SELECT p.id_producto AS id, p.nombre, p.descripcion, p.precio, 
+             p.imagen_principal AS imagen_url, nombre_categoria AS categoria 
+      FROM productos p
+      LEFT JOIN categorias c ON p.id_categoria = c.id_categoria
+      ORDER BY p.id_producto DESC
+    `);
     res.json(result.rows);
   } catch (err) {
     console.error("🚨 ERROR REAL AQUÍ:", err);
@@ -67,12 +73,23 @@ app.get("/productos", async (req, res) => {
   }
 });
 
+// OBTENER CATEGORÍAS (Recomendado para tu select dinámico)
+app.get("/categorias", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT id_categoria, nombre FROM categorias ORDER BY nombre ASC");
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// CREAR PRODUCTO
 app.post("/productos", async (req, res) => {
-  const { nombre, categoria, precio, imagen_url, descripcion } = req.body;
+  const { nombre, id_categoria, precio, imagen_url, descripcion } = req.body;
   try {
     const nuevoProduct = await pool.query(
-      "INSERT INTO productos (nombre, categoria, precio, imagen_url, descripcion) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [nombre, categoria, precio, imagen_url, descripcion],
+      "INSERT INTO productos (nombre, id_categoria, precio, imagen_principal, descripcion) VALUES ($1, $2, $3, $4, $5) RETURNING id_producto AS id, nombre, precio",
+      [nombre, id_categoria || null, precio, imagen_url, descripcion],
     );
     res.json(nuevoProduct.rows[0]);
   } catch (err) {
@@ -81,13 +98,14 @@ app.post("/productos", async (req, res) => {
   }
 });
 
+// ACTUALIZAR PRODUCTO
 app.put("/productos/:id", async (req, res) => {
   const { id } = req.params;
-  const { precio, nombre, categoria } = req.body;
+  const { precio, nombre, id_categoria } = req.body;
   try {
     await pool.query(
-      "UPDATE productos SET nombre = $1, precio = $2, categoria = $3 WHERE id = $4",
-      [nombre, precio, categoria, id],
+      "UPDATE productos SET nombre = $1, precio = $2, id_categoria = $3 WHERE id_producto = $4",
+      [nombre, precio, id_categoria, id],
     );
     res.json("Producto actualizado");
   } catch (err) {
@@ -95,37 +113,38 @@ app.put("/productos/:id", async (req, res) => {
   }
 });
 
+// ELIMINAR PRODUCTO
 app.delete("/productos/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    await pool.query("DELETE FROM productos WHERE id = $1", [id]);
+    await pool.query("DELETE FROM productos WHERE id_producto = $1", [id]);
     res.json({ message: "Producto eliminado" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
+// CREAR PEDIDO
 app.post("/pedidos", async (req, res) => {
-  const { usuario_id, nombre_cliente, total, metodo, items } = req.body;
+  const { usuario_id, total, metodo, items } = req.body;
   const client = await pool.connect();
 
   try {
     await client.query("BEGIN");
 
     const nuevoPedido = await client.query(
-      "INSERT INTO pedidos (usuario_id, nombre_cliente, total, estado, metodo, fecha) VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING *",
-      [usuario_id, nombre_cliente, total, "pendiente", metodo],
+      "INSERT INTO pedidos (id_usuario, total, estado, metodo_pago, creado_en) VALUES ($1, $2, $3, $4, NOW()) RETURNING id_pedido AS id, total, estado, creado_en AS fecha",
+      [usuario_id, total, "pendiente", metodo],
     );
 
     const pedidoId = nuevoPedido.rows[0].id;
 
     for (const item of items) {
       await client.query(
-        "INSERT INTO detalle_pedidos (pedido_id, producto_id, nombre_producto, cantidad, precio_unitario, subtotal) VALUES ($1, $2, $3, $4, $5, $6)",
+        "INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio_unitario, subtotal) VALUES ($1, $2, $3, $4, $5)",
         [
           pedidoId,
           item.id,
-          item.nombre,
           item.cantidad,
           item.precio,
           item.precio * item.cantidad,
@@ -143,26 +162,35 @@ app.post("/pedidos", async (req, res) => {
   }
 });
 
+// OBTENER PEDIDOS
 app.get("/pedidos", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM pedidos ORDER BY id DESC");
+    const result = await pool.query(`
+      SELECT id_pedido AS id, id_usuario, estado, metodo_pago AS metodo, total, creado_en AS fecha 
+      FROM pedidos ORDER BY id_pedido DESC
+    `);
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
+// OBTENER PEDIDO POR ID (Corregido: dp.subtotal en lugar de dp.subtitle)
 app.get("/pedidos/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const pedido = await pool.query("SELECT * FROM pedidos WHERE id = $1", [
-      id,
-    ]);
+    const pedido = await pool.query(
+      "SELECT id_pedido AS id, id_usuario, estado, metodo_pago AS metodo, total, creado_en AS fecha FROM pedidos WHERE id_pedido = $1",
+      [id]
+    );
     if (pedido.rows.length === 0) {
       return res.status(404).json({ error: "Pedido no encontrado" });
     }
     const items = await pool.query(
-      `SELECT nombre_producto AS nombre, cantidad, precio_unitario AS precio, subtotal
-       FROM detalle_pedidos WHERE pedido_id = $1`,
+      `SELECT p.nombre, dp.cantidad, dp.precio_unitario AS precio, dp.subtotal AS subtotal
+       FROM detalle_pedido dp
+       JOIN productos p ON dp.id_producto = p.id_producto
+       WHERE dp.id_pedido = $1`,
       [id],
     );
     res.json({ ...pedido.rows[0], items: items.rows });
@@ -171,36 +199,33 @@ app.get("/pedidos/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// DASHBOARD
 app.get("/dashboard", async (req, res) => {
   try {
-    const ingresos = await pool.query(
-      `SELECT COALESCE(SUM(total), 0) AS total FROM pedidos`,
-    );
+    const ingresos = await pool.query(`SELECT COALESCE(SUM(total), 0) AS total FROM pedidos`);
 
     const pedidoActual = await pool.query(
-      `SELECT COUNT(*) AS total FROM pedidos
-       WHERE DATE(fecha) = CURRENT_DATE`,
+      `SELECT COUNT(*) AS total FROM pedidos WHERE DATE(creado_en) = CURRENT_DATE`
     );
 
-    const productos = await pool.query(
-      `SELECT COUNT(*) AS total FROM productos`,
-    );
+    const productos = await pool.query(`SELECT COUNT(*) AS total FROM productos`);
 
     const usuarios = await pool.query(`SELECT COUNT(*) AS total FROM usuarios`);
 
-    const actividad = await pool.query(
-      `SELECT id, nombre_cliente, total, estado, fecha
-       FROM pedidos
-       ORDER BY fecha DESC
-       LIMIT 3`,
-    );
+    const actividad = await pool.query(`
+      SELECT id_pedido AS id, total, estado, creado_en AS fecha
+      FROM pedidos
+      ORDER BY creado_en DESC
+      LIMIT 3
+    `);
 
-    const stockBajo = await pool.query(
-      `SELECT id, nombre, imagen_url
-       FROM productos
-       ORDER BY id DESC
-       LIMIT 4`,
-    );
+    const stockBajo = await pool.query(`
+      SELECT id_producto AS id, nombre, imagen_principal AS imagen_url
+      FROM productos
+      ORDER BY id_producto DESC
+      LIMIT 4
+    `);
 
     res.json({
       ingresos: Number(ingresos.rows[0].total),
@@ -215,23 +240,23 @@ app.get("/dashboard", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// LOGIN ADMIN
 app.post("/login-admin", async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const adminQuery = await pool.query(
-      "SELECT * FROM usuarios WHERE email = $1 AND rol = 'admin'",
+      "SELECT * FROM usuarios WHERE email = $1",
       [email],
     );
 
     if (adminQuery.rows.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "El administrador no existe o no tiene permisos" });
+      return res.status(400).json({ message: "El administrador no existe" });
     }
 
     const admin = adminQuery.rows[0];
-    const validarContraseña = await bcrypt.compare(password, admin.password);
+    const validarContraseña = await bcrypt.compare(password, admin.contrasena_hash);
 
     if (!validarContraseña) {
       return res.status(400).json({ message: "Contraseña incorrecta" });
@@ -243,73 +268,9 @@ app.post("/login-admin", async (req, res) => {
     });
   } catch (error) {
     console.error("🚨 Error real en /login-admin:", error);
-    res
-      .status(500)
-      .json({ message: "Error interno en el servidor: " + error.message });
+    res.status(500).json({ message: "Error interno en el servidor: " + error.message });
   }
 });
 
-
-app.post("/forgot-password", async (req, res) => {
-  const { email } = req.body;
-  const user = await pool.query("SELECT id FROM usuarios WHERE email = $1", [
-    email,
-  ]);
-  if (user.rows.length === 0)
-    return res.json({ message: "Si existe, se envió el correo" });
- 
-  const token = crypto.randomBytes(32).toString('hex');
-  const expire = new Date(Date.now() + 3600000);
- 
-  await pool.query(
-    "UPDATE usuarios SET reset_token = $1, reset_token_expires = $2 WHERE id = $3",
-    [token, expire, user.rows[0].id],
-  );
-
-  const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
- 
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "Restablecer contraseña",
-    html: `<a href="${process.env.FRONTEND_URL}/restablecer/${token}">Restablecer contraseña</a>`,
-  });
-  res.json({ message: "Si existe, se envió el correo" });
-});
- 
-
-app.post("/reset-password", async (req, res) => {
-  const { token, newPassword } = req.body;
-  console.log("🔎 Token recibido desde el frontend:", token);
- 
-  const todos = await pool.query(
-    "SELECT id, email, reset_token, reset_token_expires, NOW() as ahora FROM usuarios WHERE reset_token IS NOT NULL"
-  );
-  console.log("🔎 Usuarios con reset_token guardado en la BD:", todos.rows);
- 
-  const user = await pool.query(
-    "SELECT id FROM usuarios WHERE reset_token = $1 AND reset_token_expires > NOW()",
-    [token],
-  );
-  console.log("🔎 Coincidencias encontradas:", user.rows.length);
- 
-  if (user.rows.length === 0)
-    return res.status(400).json({ error: "Enlace inválido o expirado" });
- 
-  const hashed = await bcrypt.hash(newPassword, 10);
-  await pool.query(
-    "UPDATE usuarios SET password = $1, reset_token = NULL WHERE id = $2",
-    [hashed, user.rows[0].id],
-  );
- 
-  res.json({ message: "Contraseña actualizada" });
-});
- 
 const PORT = 3001;
 app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));

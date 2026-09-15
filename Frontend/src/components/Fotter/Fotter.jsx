@@ -1,6 +1,6 @@
 import '../Fotter/Fotter.css'
 import {Link} from 'react-router-dom'
-import LogoEcommerce from '../../assets/logo-store.jpg'
+import LogoEcommerce from '../../assets/Logo-store.jpg'
 
 const Fotter = () => {
   return (

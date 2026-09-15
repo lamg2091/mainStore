@@ -16,8 +16,8 @@ import LoginAdmin from "./pages/LoginAdmin";
 import RestablecerContrasena from './pages/RestablecerContrasena'
 
 import AdminLayout from './admin/Layout/AdminLayout';
-import Dashboard from './admin/pages/Dashboard';
-import ProductosAdmin from './admin/pages/ProductosAdmin';
+import Dashboard from './admin/Pages/Dashboard';
+import ProductosAdmin from './admin/Pages/ProductosAdmin';
 import PedidosAdmin from './admin/Pages/PedidosAdmin';
 
 function App() {
