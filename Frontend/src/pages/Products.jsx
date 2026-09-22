@@ -112,7 +112,7 @@ const Products = () => {
                       <button type="button" onClick={() => addToCart(producto)}>
                         <i className="fa-solid fa-cart-shopping"></i> Add Cart
                       </button>
-                      <Link to={`/detalles/${producto.id}`}>
+                      <Link to={'/detalle'}>
                         <i className="fa-solid fa-circle-info"></i> Detalles
                       </Link>
                     </div>

@@ -14,11 +14,13 @@ import CartShopping from './components/Carrito/CartShopping';
 import { CartProvider } from "./components/context/cartContext";
 import LoginAdmin from "./pages/LoginAdmin";
 import RestablecerContrasena from './pages/RestablecerContrasena'
+import DetalleProducto from "./pages/DetalleProducto";
 
 import AdminLayout from './admin/Layout/AdminLayout';
 import Dashboard from './admin/Pages/Dashboard';
 import ProductosAdmin from './admin/Pages/ProductosAdmin';
 import PedidosAdmin from './admin/Pages/PedidosAdmin';
+
 
 function App() {
   return (
@@ -45,6 +47,7 @@ function App() {
               <Route path="registro" element={<LoginRegister />} />
               <Route path="nuevaContraseña" element={<NuevaContraseña />} />
               <Route path="restablecer/:token" element={<RestablecerContrasena />} />
+              <Route path="detalle" element={<DetalleProducto/>}/>
               <Route path="*" element={<Home />} />
             </Routes>
             <Fotter />

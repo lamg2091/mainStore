@@ -13,7 +13,7 @@ const pool = new Pool({
   user: "postgres",
   host: "localhost",
   database: "mainstore",
-  password: "miclave123",
+  password: "test123",
   port: 5432,
 });
 
@@ -56,12 +56,12 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// OBTENER PRODUCTOS (Corregido: c.nombre en lugar de nombre_categoria)
+// OBTENER PRODUCTOS (Corregido: p.nombre y c.nombre, sin ambigüedad)
 app.get("/productos", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT p.id_producto AS id, p.nombre, p.descripcion, p.precio, 
-             p.imagen_principal AS imagen_url, nombre_categoria AS categoria 
+             p.imagen_pricipal AS imagen_url, c.nombre AS categoria 
       FROM productos p
       LEFT JOIN categorias c ON p.id_categoria = c.id_categoria
       ORDER BY p.id_producto DESC
@@ -88,7 +88,7 @@ app.post("/productos", async (req, res) => {
   const { nombre, id_categoria, precio, imagen_url, descripcion } = req.body;
   try {
     const nuevoProduct = await pool.query(
-      "INSERT INTO productos (nombre, id_categoria, precio, imagen_principal, descripcion) VALUES ($1, $2, $3, $4, $5) RETURNING id_producto AS id, nombre, precio",
+      "INSERT INTO productos (nombre, id_categoria, precio, imagen_pricipal, descripcion) VALUES ($1, $2, $3, $4, $5) RETURNING id_producto AS id, nombre, precio",
       [nombre, id_categoria || null, precio, imagen_url, descripcion],
     );
     res.json(nuevoProduct.rows[0]);
@@ -175,7 +175,7 @@ app.get("/pedidos", async (req, res) => {
   }
 });
 
-// OBTENER PEDIDO POR ID (Corregido: dp.subtotal en lugar de dp.subtitle)
+// OBTENER PEDIDO POR ID
 app.get("/pedidos/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -221,7 +221,7 @@ app.get("/dashboard", async (req, res) => {
     `);
 
     const stockBajo = await pool.query(`
-      SELECT id_producto AS id, nombre, imagen_principal AS imagen_url
+      SELECT id_producto AS id, nombre, imagen_pricipal AS imagen_url
       FROM productos
       ORDER BY id_producto DESC
       LIMIT 4

@@ -1,0 +1,114 @@
+.container{
+    display: flex;
+    justify-content: center;
+    height:100vh;
+    align-items: center;
+    gap: 2px;
+    line-height: 1.5;
+}
+.container-detalle{
+    display: flex;
+    border: 1px solid #333;
+    border-radius: 10px;
+}
+.descripcion-detalle p, h3{
+    color: #D3D3D3;
+    font-weight: 100;
+    font-size: 1rem;
+  
+    
+}
+.descripcion h2{
+    font-size: 1.3rem;
+}
+
+.descripcion button{
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px 5px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+.descripcion button:hover{
+    color:#333;
+    background-color: #D3D3D3;
+}
+hr{
+    color: #D3D3D3;
+    border: 1px solid #D3D3D3;
+}
+.descripcion{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 400px;
+    padding: 10px;
+    
+}
+.resena{
+    width: 100%;
+}
+.resena h2{
+    font-size: 1rem;
+    font-weight: 100;
+    margin-bottom: 20px;
+}
+.descripcion-resena{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    align-items: center;
+    gap: 10px;
+}
+.container-svg{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+.descripcion-resena .img{
+    border-radius: 999px;
+    object-fit: fill;
+    width: 45px;
+    height: 45px;
+}
+
+.container img{
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+
+}
+.container-talla{
+    width: 100%;
+    margin-top: 20px;
+}
+.container-talla .card-talla p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #333;
+    border-radius: 5px;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+}
+.container-talla .card-talla p.active{
+    background-color: #333;
+    color: white;
+    border: solid 1px #D3D3D3
+}
+.container-talla h5{
+    font-size: 1rem;
+}
+.container-talla .card-talla{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.descripcion-resena svg{
+    width: 15px;
+    color: yellow;
+}
