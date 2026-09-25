@@ -61,7 +61,7 @@ const DetalleProducto = () => {
               Bolsa <span>(0)</span>
             </p>
 
-            <Hamburguer />
+            <Hamburguer  />
           </div>
         </div>
       </div>
